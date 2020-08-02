@@ -26,6 +26,7 @@ import org.springframework.context.ApplicationListener;
  * related configuration.
  *
  * @author Biju Kunjummen
+ *  事件驱动的Ribbon client 初始化组件
  */
 public class RibbonApplicationContextInitializer
 		implements ApplicationListener<ApplicationReadyEvent> {

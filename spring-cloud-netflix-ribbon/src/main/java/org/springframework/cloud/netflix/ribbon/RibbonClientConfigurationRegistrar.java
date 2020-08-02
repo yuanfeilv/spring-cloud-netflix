@@ -27,6 +27,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * @author Dave Syer
+ * 采用动态注入大的方式，实现ImportBeanDefinitionRegistrar 接口 的方式，spring 会将bean 进行注入
  */
 public class RibbonClientConfigurationRegistrar implements ImportBeanDefinitionRegistrar {
 

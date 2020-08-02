@@ -50,6 +50,7 @@ public class SpringClientFactory extends NamedContextFactory<RibbonClientSpecifi
 	 * @param <C> {@link IClient} subtype
 	 * @return {@link IClient} instance
 	 * @throws RuntimeException if any error occurs
+	 * 根据sericeId 获取restClient
 	 */
 	public <C extends IClient<?, ?>> C getClient(String name, Class<C> clientClass) {
 		return getInstance(name, clientClass);
@@ -60,6 +61,7 @@ public class SpringClientFactory extends NamedContextFactory<RibbonClientSpecifi
 	 * @param name name to search by
 	 * @return {@link ILoadBalancer} instance
 	 * @throws RuntimeException if any error occurs
+	 * 获取loadBalancer
 	 */
 	public ILoadBalancer getLoadBalancer(String name) {
 		return getInstance(name, ILoadBalancer.class);
@@ -70,6 +72,7 @@ public class SpringClientFactory extends NamedContextFactory<RibbonClientSpecifi
 	 * @param name name to search by
 	 * @return {@link IClientConfig} instance
 	 * @throws RuntimeException if any error occurs
+	 *  获取IClientConfig
 	 */
 	public IClientConfig getClientConfig(String name) {
 		return getInstance(name, IClientConfig.class);
@@ -80,6 +83,7 @@ public class SpringClientFactory extends NamedContextFactory<RibbonClientSpecifi
 	 * @param serviceId id of the service to search by
 	 * @return {@link RibbonLoadBalancerContext} instance
 	 * @throws RuntimeException if any error occurs
+	 * 根据serviceId获取RibbonLoadBalancerContext
 	 */
 	public RibbonLoadBalancerContext getLoadBalancerContext(String serviceId) {
 		return getInstance(serviceId, RibbonLoadBalancerContext.class);
@@ -126,6 +130,7 @@ public class SpringClientFactory extends NamedContextFactory<RibbonClientSpecifi
 		return instantiateWithConfig(getContext(name), type, config);
 	}
 
+	// 获取ioc 容器
 	@Override
 	protected AnnotationConfigApplicationContext getContext(String name) {
 		return super.getContext(name);

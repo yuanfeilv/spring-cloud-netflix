@@ -58,11 +58,14 @@ import org.springframework.web.client.RestTemplate;
  */
 @Configuration
 @Conditional(RibbonAutoConfiguration.RibbonClassesConditions.class)
+// Ribbon 客户端配置文件注入，下面自动注入的configuration 的spring bean 在此处创建
 @RibbonClients
 @AutoConfigureAfter(
 		name = "org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration")
 @AutoConfigureBefore({ LoadBalancerAutoConfiguration.class,
 		AsyncLoadBalancerAutoConfiguration.class })
+// spring 自动注入配置文件 EagerLoad 饥饿加载客户端，主要是默认情况下ribbon 进行负载均衡的客户端不是主动加载的
+
 @EnableConfigurationProperties({ RibbonEagerLoadProperties.class,
 		ServerIntrospectorProperties.class })
 public class RibbonAutoConfiguration {
@@ -70,6 +73,7 @@ public class RibbonAutoConfiguration {
 	@Autowired(required = false)
 	private List<RibbonClientSpecification> configurations = new ArrayList<>();
 
+	// 饥饿加载的配置
 	@Autowired
 	private RibbonEagerLoadProperties ribbonEagerLoadProperties;
 
@@ -78,6 +82,7 @@ public class RibbonAutoConfiguration {
 		return HasFeatures.namedFeature("Ribbon", Ribbon.class);
 	}
 
+	// 为每个@RibbonClient 创建一个子容器，并通过serviceId 读取容器中的IClient 等
 	@Bean
 	@ConditionalOnMissingBean
 	public SpringClientFactory springClientFactory() {
@@ -86,12 +91,14 @@ public class RibbonAutoConfiguration {
 		return factory;
 	}
 
+	// 负载均衡类
 	@Bean
 	@ConditionalOnMissingBean(LoadBalancerClient.class)
 	public LoadBalancerClient loadBalancerClient() {
 		return new RibbonLoadBalancerClient(springClientFactory());
 	}
 
+	// 重试的工场类
 	@Bean
 	@ConditionalOnClass(name = "org.springframework.retry.support.RetryTemplate")
 	@ConditionalOnMissingBean
@@ -106,6 +113,7 @@ public class RibbonAutoConfiguration {
 		return new PropertiesFactory();
 	}
 
+	// 饥饿加载的初始化类
 	@Bean
 	@ConditionalOnProperty("ribbon.eager-load.enabled")
 	public RibbonApplicationContextInitializer ribbonApplicationContextInitializer() {
